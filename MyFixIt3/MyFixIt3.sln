@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyFixIt3", "MyFixIt3\MyFixIt3.csproj", "{3CF34B47-E22F-48AD-8B09-87F335428703}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyFixIt3.Persistence", "MyFixIt3.Persistence\MyFixIt3.Persistence.csproj", "{B591AD51-DA80-44F5-809B-26F713D0A627}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyFixIt.Logging", "MyFixIt.Logging\MyFixIt.Logging.csproj", "{DB8BFF82-FC25-4FDF-9BCC-D5649873191C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3CF34B47-E22F-48AD-8B09-87F335428703}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CF34B47-E22F-48AD-8B09-87F335428703}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CF34B47-E22F-48AD-8B09-87F335428703}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CF34B47-E22F-48AD-8B09-87F335428703}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B591AD51-DA80-44F5-809B-26F713D0A627}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B591AD51-DA80-44F5-809B-26F713D0A627}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B591AD51-DA80-44F5-809B-26F713D0A627}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B591AD51-DA80-44F5-809B-26F713D0A627}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB8BFF82-FC25-4FDF-9BCC-D5649873191C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB8BFF82-FC25-4FDF-9BCC-D5649873191C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB8BFF82-FC25-4FDF-9BCC-D5649873191C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB8BFF82-FC25-4FDF-9BCC-D5649873191C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
