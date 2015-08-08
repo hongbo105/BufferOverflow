@@ -42,12 +42,17 @@ namespace MyFixIt3.Controllers
                 //    await fixItRepository.CreateAsync(fixittask);
                 //}
 
-                // return RedirectToAction("Success");
+                return RedirectToAction("Success");
 
             }
 
             return View();
             // return View(fixittask);
+        }
+
+        public ActionResult Success()
+        {
+            return View();
         }
     }
 }
