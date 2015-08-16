@@ -13,7 +13,8 @@ namespace MyFixIt3.Controllers
 {
     public class TasksController : Controller
     {
-        private IFixItQueueManager queueManager = new FixItQueueManager();
+        private readonly IFixItQueueManager _queueManager = new FixItQueueManager();
+        private IPhotoService _photoService = new PhotoService();
 
         // GET: Tasks
         public ActionResult Create()
@@ -25,28 +26,23 @@ namespace MyFixIt3.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "FixItTaskId,CreatedBy,Owner,Title,Notes,PhotoUrl,IsDone")]FixItTask fixittask, HttpPostedFileBase photo)
         {
-            if (ModelState.IsValid)
-            {
-                fixittask.CreatedBy = User.Identity.Name;
-                // fixittask.PhotoUrl = await photoService.UploadPhotoAsync(photo);
-                fixittask.PhotoUrl = "http://justafakeurl";
+            if (!ModelState.IsValid) return View();
+            fixittask.CreatedBy = User.Identity.Name;
+            fixittask.PhotoUrl = await _photoService.UploadPhotoAsync(photo);
 
-                await queueManager.SendMessageAsync(fixittask);
+            await _queueManager.SendMessageAsync(fixittask);
 
-                //if (ConfigurationManager.AppSettings["UseQueues"] == "true")
-                //{
-                //    await queueManager.SendMessageAsync(fixittask);
-                //}
-                //else
-                //{
-                //    await fixItRepository.CreateAsync(fixittask);
-                //}
+            //if (ConfigurationManager.AppSettings["UseQueues"] == "true")
+            //{
+            //    await queueManager.SendMessageAsync(fixittask);
+            //}
+            //else
+            //{
+            //    await fixItRepository.CreateAsync(fixittask);
+            //}
 
-                return RedirectToAction("Success");
+            return RedirectToAction("Success");
 
-            }
-
-            return View();
             // return View(fixittask);
         }
 
