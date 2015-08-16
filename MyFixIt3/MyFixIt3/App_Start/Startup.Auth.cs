@@ -58,11 +58,11 @@ namespace MyFixIt3
             //   appId: "",
             //   appSecret: "");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "753613068306-8csm8knu72u7fkgsecm6tlja2sa5v56e.apps.googleusercontent.com",
+                ClientSecret = "P-xBT12FJBZLqCK-qyM1xx5h"
+            });
         }
     }
 }
