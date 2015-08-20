@@ -8,7 +8,7 @@ using MyFixIt.Logging;
 
 namespace MyFixIt3.Persistence
 {
-    internal class FixItTaskRepository : IFixItTaskRepository
+    internal class FixItTaskRepository : IFixItTaskRepository, IDisposable
     {
         private FixItContext _context = new FixItContext();
         private readonly Logger _logger = new Logger();
@@ -149,6 +149,24 @@ namespace MyFixIt3.Persistence
             {
                 _logger.Error(ex, "Error in FindTasksByCreatorAsync, username = {0}", userName);
                 throw;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool dispose)
+        {
+            if(dispose == true)
+            {
+                if(_context != null)
+                {
+                    _context.Dispose();
+                    _context = null;
+                }
             }
         }
     }
