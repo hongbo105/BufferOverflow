@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Auth;
@@ -48,7 +49,7 @@ namespace MyFixIt3.Persistence
             }
         }
 
-        public async Task ProcessMessageAsync()
+        public async Task ProcessMessageAsync(CancellationToken token)
         {
             var watch = Stopwatch.StartNew();
 
@@ -59,14 +60,18 @@ namespace MyFixIt3.Persistence
                 var queue = queueClient.GetQueueReference(_queueName);
                 await queue.CreateIfNotExistsAsync();
 
-                var taskInJson = await queue.GetMessageAsync();
-                if (taskInJson != null)
+                while (!token.IsCancellationRequested)
                 {
-                    var task = JsonConvert.DeserializeObject<FixItTask>(taskInJson.AsString);
-                    await _taskRepo.CreateAsync(task);
-                    await queue.DeleteMessageAsync(taskInJson);
-                    watch.Stop();
-                    _logger.TraceApi("Queue Manager", "SendMessageAsync", watch.Elapsed, "Task to process: {0}", task);
+                    var taskInJson = await queue.GetMessageAsync();
+                    if (taskInJson != null)
+                    {
+                        var task = JsonConvert.DeserializeObject<FixItTask>(taskInJson.AsString);
+                        await _taskRepo.CreateAsync(task);
+                        await queue.DeleteMessageAsync(taskInJson);
+                        watch.Stop();
+                        _logger.TraceApi("Queue Manager", "SendMessageAsync", watch.Elapsed, "Task to process: {0}",
+                            task);
+                    }
                 }
             }
             catch (Exception ex)

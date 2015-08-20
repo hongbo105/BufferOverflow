@@ -65,7 +65,7 @@ namespace MyFixItWorkerRole
             while (!cancellationToken.IsCancellationRequested)
             {
                 var queueManager = new FixItQueueManager();
-                await queueManager.ProcessMessageAsync();
+                await queueManager.ProcessMessageAsync(cancellationToken);
                 Trace.TraceInformation("Working");
                 await Task.Delay(1000);
             }
