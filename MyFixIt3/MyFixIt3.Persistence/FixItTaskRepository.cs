@@ -8,7 +8,7 @@ using MyFixIt.Logging;
 
 namespace MyFixIt3.Persistence
 {
-    internal class FixItTaskRepository : IFixItTaskRepository, IDisposable
+    public class FixItTaskRepository : IFixItTaskRepository, IDisposable
     {
         private FixItContext _context = new FixItContext();
         private readonly Logger _logger = new Logger();

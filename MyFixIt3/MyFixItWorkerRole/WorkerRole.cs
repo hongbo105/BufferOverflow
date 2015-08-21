@@ -11,6 +11,7 @@ using Microsoft.WindowsAzure.ServiceRuntime;
 using Microsoft.WindowsAzure.Storage;
 using MyFixIt3.Persistence;
 using MyFixIt.Logging;
+using Autofac;
 
 namespace MyFixItWorkerRole
 {
@@ -19,9 +20,12 @@ namespace MyFixItWorkerRole
         private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         private readonly ManualResetEvent runCompleteEvent = new ManualResetEvent(false);
 
+        private IContainer container;
+        private ILogger logger;
+
         public override void Run()
         {
-            Trace.TraceInformation("MyFixItWorkerRole is running");
+            logger.Information("MyFixItWorkerRole is running");
 
             try
             {
@@ -41,33 +45,49 @@ namespace MyFixItWorkerRole
             // For information on handling configuration changes
             // see the MSDN topic at http://go.microsoft.com/fwlink/?LinkId=166357.
 
+            var builder = new ContainerBuilder();
+
+            builder.RegisterType<FixItQueueManager>().As<IFixItQueueManager>();
+            builder.RegisterType<FixItTaskRepository>().As<IFixItTaskRepository>().SingleInstance();
+            builder.RegisterType<Logger>().As<ILogger>().SingleInstance();
+
+            container = builder.Build();
+
+            logger = container.Resolve<ILogger>();
+
             bool result = base.OnStart();
 
-            Trace.TraceInformation("MyFixItWorkerRole has been started");
+            logger.Information("MyFixItWorkerRole has been started");
 
             return result;
         }
 
         public override void OnStop()
         {
-            Trace.TraceInformation("MyFixItWorkerRole is stopping");
+            logger.Information("MyFixItWorkerRole is stopping");
 
             this.cancellationTokenSource.Cancel();
             this.runCompleteEvent.WaitOne();
 
             base.OnStop();
 
-            Trace.TraceInformation("MyFixItWorkerRole has stopped");
+            logger.Information("MyFixItWorkerRole has stopped");
         }
 
         private async Task RunAsync(CancellationToken cancellationToken)
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                var queueManager = new FixItQueueManager();
-                await queueManager.ProcessMessageAsync(cancellationToken);
-                Trace.TraceInformation("Working");
-                await Task.Delay(1000);
+                logger.Information("MyFixItWorkerRole RunAsync");
+
+                using (var scope = container.BeginLifetimeScope())
+                {
+                    Trace.TraceInformation("MyFixItWorkerRole RunAsync");
+                    var queueManager = scope.Resolve<IFixItQueueManager>();
+                    await queueManager.ProcessMessageAsync(cancellationToken);
+                    logger.Information("Working");
+                    await Task.Delay(1000);
+                }
             }
         }
     }
